@@ -26,11 +26,18 @@ routes.post("/fibonacci", (req: Request, res: Response) => {
   let hasDecisiveVote = false;
   let result: number = null;
 
-  for (const [key, value] of resultsCache.fibonacci) {
-    if (value >= CONSENSUS_THRESHOLD) {
-      hasDecisiveVote = true;
-      result = key;
-      break;
+  //Counting votes
+  const mapObject = Object.fromEntries(resultsCache.fibonacci);
+  const mapValues = Object.values(mapObject);
+  const voteCount = mapValues.reduce((acc, current) => acc + current, 0);
+
+  if (voteCount > 2) {
+    for (const [key, value] of resultsCache.fibonacci) {
+      if (value >= CONSENSUS_THRESHOLD) {
+        hasDecisiveVote = true;
+        result = key;
+        break;
+      }
     }
   }
 
@@ -59,11 +66,18 @@ routes.post("/factorial", (req: Request, res: Response) => {
   let hasDecisiveVote = false;
   let result: number = null;
 
-  for (const [key, value] of resultsCache.factorial) {
-    if (value >= CONSENSUS_THRESHOLD) {
-      hasDecisiveVote = true;
-      result = key;
-      break;
+  //Counting votes
+  const mapObject = Object.fromEntries(resultsCache.factorial);
+  const mapValues = Object.values(mapObject);
+  const voteCount = mapValues.reduce((value1, value2) => value1 + value2, 0);
+
+  if (voteCount > 2) {
+    for (const [key, value] of resultsCache.factorial) {
+      if (value >= CONSENSUS_THRESHOLD) {
+        hasDecisiveVote = true;
+        result = key;
+        break;
+      }
     }
   }
 
